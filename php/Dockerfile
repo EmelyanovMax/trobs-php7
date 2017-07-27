@@ -1,0 +1,14 @@
+FROM php:7.0-apache
+
+COPY ./php.ini /usr/local/etc/php/
+RUN docker-php-ext-install pdo && docker-php-ext-enable pdo
+RUN docker-php-ext-install pdo_mysql && docker-php-ext-enable pdo_mysql
+RUN a2enmod rewrite
+RUN /etc/init.d/apache2 restart
+
+RUN pecl install xdebug
+ENV XDEBUGINI_PATH=/usr/local/etc/php/conf.d/xdebug.ini
+RUN echo "zend_extension="`find /usr/local/lib/php/extensions/ -iname 'xdebug.so'` > $XDEBUGINI_PATH
+COPY xdebug.ini /tmp/xdebug.ini
+RUN cat /tmp/xdebug.ini >> $XDEBUGINI_PATH
+

@@ -1,0 +1,7 @@
+FROM solr:5.5
+
+RUN /opt/solr/bin/solr start && \
+    /opt/solr/bin/solr create_core -c drupal
+
+COPY ./conf /opt/solr/server/solr/mycores/drupal/conf
+COPY ./conf /opt/solr/server/solr/drupal/conf
